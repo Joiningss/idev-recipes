@@ -70,31 +70,17 @@ CGFloat RadiansToDegrees(CGFloat radians) {return radians * 180/M_PI;};
 -(UIWebView*) viewForScrollView:(VerticalSwipeScrollView*)scrollView atPage:(NSUInteger)page
 {
     UIWebView* webView = nil;
-    if (page < scrollView.currentPageIndex)
-        webView = previousPage;
-    else if (page > scrollView.currentPageIndex)
+    if (page > scrollView.currentPageIndex)
         webView = nextPage;
     BOOL isCurrentPageLoading = NO;
     if (!webView){
         webView = [self createWebViewForIndex:page verticalSwipeScrollViewv:scrollView];
         isCurrentPageLoading = YES;
     }
-    //otimization webview preload
-    if(isCurrentPageLoading){
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            self.previousPage = page > 0 ? [self createWebViewForIndex:page-1 verticalSwipeScrollViewv:scrollView] : nil;
-            self.nextPage = (page == (appData.count-1)) ? nil : [self createWebViewForIndex:page+1 verticalSwipeScrollViewv:scrollView];        });
-    }else{
-        self.previousPage = page > 0 ? [self createWebViewForIndex:page-1 verticalSwipeScrollViewv:scrollView] : nil;
-        self.nextPage = (page == (appData.count-1)) ? nil : [self createWebViewForIndex:page+1 verticalSwipeScrollViewv:scrollView];
-    }
-    
+    //in most caset,user will load nextpage,so we only preload nextpage
+
+    self.nextPage = (page == (appData.count-1)) ? nil : [self createWebViewForIndex:page+1 verticalSwipeScrollViewv:scrollView];
     self.navigationItem.title = [[[appData objectAtIndex:page] objectForKey:@"im:name"] objectForKey:@"label"];
-    if (page > 0)
-        headerLabel.text = [[[appData objectAtIndex:page-1] objectForKey:@"im:name"] objectForKey:@"label"];
-    if (page != appData.count-1)
-        footerLabel.text = [[[appData objectAtIndex:page+1] objectForKey:@"im:name"] objectForKey:@"label"];
-    [webView clearsContextBeforeDrawing];
     return webView;
 }
 

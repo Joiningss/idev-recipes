@@ -68,7 +68,7 @@ static const CGFloat kSidePullViewWidth = 60.0;
         }];
     } else {
         BOOL isBottom = (self.position == AllAroundPullViewPositionBottom);
-        if(!flipped && self.hideIndicatorView){
+        if(_state == AllAroundPullViewStateLoading && self.hideIndicatorView){
             return;
         }
         [UIView animateWithDuration:0.1 animations:^{

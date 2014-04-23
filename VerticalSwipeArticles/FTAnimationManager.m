@@ -281,7 +281,7 @@ NSString *const kFTAnimationWasInteractionEnabledKey = @"kFTAnimationWasInteract
   
   CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
   CGMutablePathRef thePath = CGPathCreateMutable();
-  CGPathAddLines(thePath, NULL, path, 3);
+  CGPathAddLines(thePath, NULL, path, sizeof(path)/sizeof(path[0]));
   animation.path = thePath;
   CGPathRelease(thePath);
   NSArray *animations;
@@ -309,10 +309,9 @@ NSString *const kFTAnimationWasInteractionEnabledKey = @"kFTAnimationWasInteract
 		//[self overshootPointFor:view.center withDirection:direction threshold:overshootThreshold_],
 		FTAnimationOutOfViewCenterPoint(enclosingView.bounds, view.frame, view.center, direction)
 	};
-	
 	CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
 	CGMutablePathRef thePath = CGPathCreateMutable();
-	CGPathAddLines(thePath, NULL, path, 3);
+	CGPathAddLines(thePath, NULL, path, sizeof(path)/sizeof(path[0]));
 	animation.path = thePath;
 	CGPathRelease(thePath);
 	NSArray *animations;
